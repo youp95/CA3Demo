@@ -2,8 +2,10 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import entities.Output;
+import facades.ApiFacade;
+import java.util.List;
 import utils.EMF_Creator;
-import facades.FacadeExample;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,16 +13,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 //Todo Remove or change relevant parts before ACTUAL use
-@Path("xxx")
-public class RenameMeResource {
+@Path("api")
+public class ApiResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
                 "pu",
                 "jdbc:mysql://localhost:3307/startcode",
-                "dev",
-                "ax2",
+                "sj1234",
+                "sj1234",
                 EMF_Creator.Strategy.CREATE);
-    private static final FacadeExample FACADE =  FacadeExample.getFacadeExample(EMF);
+    private static final ApiFacade FACADE =  ApiFacade.getApiFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
             
     @GET
@@ -28,12 +30,12 @@ public class RenameMeResource {
     public String demo() {
         return "{\"msg\":\"Hello World\"}";
     }
-    @Path("count")
+    @Path("server")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getRenameMeCount() {
-        long count = FACADE.getRenameMeCount();
-        return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
+    public List<Output> getDataFromServers() {
+        String[] resources = {"planets/", "people/", "starships/", "films/", "species/"};
+        return FACADE.fetchFromServers(resources);
     }
 
  
