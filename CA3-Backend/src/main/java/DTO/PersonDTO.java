@@ -6,20 +6,22 @@ import java.io.Serializable;
 public class PersonDTO implements Serializable /* tjek */{
 
    private String name;
-   private String height;
-   private String mass;
-   private String birthyear;
+   private String gender;
+   private String culture;
+   private String titles;
 
    public PersonDTO(String name, String height, String mass, String birthyear) {
         this.name = name;
-        this.height = height;
-        this.mass = mass;
-        this.birthyear = birthyear;
+        this.gender = gender;
+        this.culture = culture;
+        this.titles = titles;
     }
 
     @Override
     public String toString() {
-        return "PersonDTO{" + "name=" + name + ", height=" + height + ", mass=" + mass + ", birthyear=" + birthyear + '}';
+        return "PersonDTO{" + "name=" + name + ", gender=" + gender + ", culture=" + culture + ", titles=" + titles + '}';
     }
+
+   
 
 }

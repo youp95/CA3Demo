@@ -38,11 +38,11 @@ public class SwappiFacade {
     
     
     public String getSwappiData() throws MalformedURLException, IOException{
-        URL url = new URL("https://swapi.co/api/people/");
+        URL url = new URL("https://anapioficeandfire.com/api/characters/");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");
-        con.setRequestProperty("User-Agent", "server"); //remember if you are using SWAPI
+        //con.setRequestProperty("User-Agent", "server"); //remember if you are using SWAPI
         Scanner scan = new Scanner(con.getInputStream());
         String jsonStr = null;
         if (scan.hasNext()) {
