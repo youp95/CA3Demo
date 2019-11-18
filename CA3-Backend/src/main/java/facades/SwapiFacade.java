@@ -19,30 +19,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class SwappiFacade {
+public class SwapiFacade {
     
-    private static ExecutorService executor = Executors.newFixedThreadPool(5);
+    private static ExecutorService executor = Executors.newFixedThreadPool(10);
     Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static SwappiFacade instance;
+    private static SwapiFacade instance;
 
-    private SwappiFacade() {
+    private SwapiFacade() {
     }
 
-    public static SwappiFacade getSwappiFacade() {
+    public static SwapiFacade getSwappiFacade() {
         if (instance == null) {
 
-            instance = new SwappiFacade();
+            instance = new SwapiFacade();
         }
         return instance;
     }
     
     
-    public String getSwappiData() throws MalformedURLException, IOException{
-        URL url = new URL("https://anapioficeandfire.com/api/characters/");
+    public String getSwappiData(int id) throws MalformedURLException, IOException{
+        URL url = new URL("https://swapi.co/api/people/" + id);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");
-        //con.setRequestProperty("User-Agent", "server"); //remember if you are using SWAPI
+        con.setRequestProperty("User-Agent", "server"); //remember if you are using SWAPI
         Scanner scan = new Scanner(con.getInputStream());
         String jsonStr = null;
         if (scan.hasNext()) {
@@ -55,15 +55,16 @@ public class SwappiFacade {
     public List<PersonDTO> getAll() throws InterruptedException, ExecutionException{
         List<PersonDTO> persons = new ArrayList<>();
         
-        Queue<Future<PersonDTO>> queue = new ArrayBlockingQueue(5);
+        Queue<Future<PersonDTO>> queue = new ArrayBlockingQueue(10);
        
        // List<Future<String>> futures = new ArrayList();
         
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 10; i++) {
+            final int count = i;
             Future<PersonDTO> future = executor.submit(() -> {
                 
-                PersonDTO quote = GSON.fromJson(getSwappiData(), PersonDTO.class);
-                return quote;
+                PersonDTO person = GSON.fromJson(getSwappiData(count), PersonDTO.class);
+                return person;
             });
 
             queue.add(future);
@@ -71,11 +72,11 @@ public class SwappiFacade {
             
         
         while (!queue.isEmpty()) {
-            Future<PersonDTO> qoute = queue.poll();
-            if (qoute.isDone()) {
-                persons.add(qoute.get());
+            Future<PersonDTO> person = queue.poll();
+            if (person.isDone()) {
+                persons.add(person.get());
             } else {
-                queue.add(qoute);
+                queue.add(person);
             }
         }
 
@@ -84,9 +85,9 @@ public class SwappiFacade {
 }
    public static void main(String[] args) throws InterruptedException, ExecutionException {
         
-        SwappiFacade df = SwappiFacade.getSwappiFacade();
+        SwapiFacade sf = SwapiFacade.getSwappiFacade();
         
-        List<PersonDTO> persons = df.getAll();
+        List<PersonDTO> persons = sf.getAll();
         
         for (PersonDTO person : persons) {
             System.out.println(person);
