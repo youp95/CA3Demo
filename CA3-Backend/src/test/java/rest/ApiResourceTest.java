@@ -30,6 +30,7 @@ import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
 
+//@Disabled
 public class ApiResourceTest {
     
     private static final int SERVER_PORT = 7777;
@@ -66,14 +67,14 @@ public class ApiResourceTest {
          httpServer.shutdownNow();
     }
     
-//    @Test
-//    public void testAll() throws Exception {
-//        given()
-//        .contentType("application/json")
-//        .get("/swapi/all").then()
-//        .assertThat()
-//        .statusCode(HttpStatus.OK_200.getStatusCode())
-//        .body("size()", is(5));   
-//    }
+     @Test
+     public void testAll() throws Exception {
+        given()
+        .contentType("application/json")
+        .get("/swapi/all").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body("size()", is(5));   
+    }
 }
 
