@@ -19,25 +19,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class SwapiFacade {
+
+public class ApiFacade {
     
     private static ExecutorService executor = Executors.newFixedThreadPool(10);
-    Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static SwapiFacade instance;
+    private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static ApiFacade instance;
 
-    private SwapiFacade() {
+    private ApiFacade() {
     }
 
-    public static SwapiFacade getSwappiFacade() {
+    public static ApiFacade getApiFacade() {
         if (instance == null) {
 
-            instance = new SwapiFacade();
+            instance = new ApiFacade();
         }
         return instance;
     }
     
     
-    public String getSwappiData(int id) throws MalformedURLException, IOException{
+    public String getApiData(int id) throws MalformedURLException, IOException{
         URL url = new URL("https://swapi.co/api/people/" + id);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -52,7 +53,7 @@ public class SwapiFacade {
         return jsonStr;
       }
 
-    public List<PersonDTO> getAll() throws InterruptedException, ExecutionException{
+    public List<PersonDTO> getAll() throws InterruptedException, ExecutionException{ // maps the Json data into a list of DTO's corresponding to the properties of the JSON retrieved from Swapi
         List<PersonDTO> persons = new ArrayList<>();
         
         Queue<Future<PersonDTO>> queue = new ArrayBlockingQueue(10);
@@ -63,7 +64,7 @@ public class SwapiFacade {
             final int count = i;
             Future<PersonDTO> future = executor.submit(() -> {
                 
-                PersonDTO person = GSON.fromJson(getSwappiData(count), PersonDTO.class);
+                PersonDTO person = GSON.fromJson(getApiData(count), PersonDTO.class);
                 return person;
             });
 
@@ -85,9 +86,9 @@ public class SwapiFacade {
 }
    public static void main(String[] args) throws InterruptedException, ExecutionException {
         
-        SwapiFacade sf = SwapiFacade.getSwappiFacade();
+        ApiFacade af = ApiFacade.getApiFacade();
         
-        List<PersonDTO> persons = sf.getAll();
+        List<PersonDTO> persons = af.getAll();
         
         for (PersonDTO person : persons) {
             System.out.println(person);

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -21,20 +23,27 @@ public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  
   @Basic(optional = false)
   @NotNull
-  @Column(name = "user_name", length = 25)
+  @Column(name = "username", length = 25)
   private String userName;
+  
   @Basic(optional = false)
   @NotNull
   @Size(min = 1, max = 255)
-  @Column(name = "user_pass")
-  private String userPass;
-  @JoinTable(name = "user_roles", joinColumns = {
-    @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
-    @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
+  @Column(name = "password")
+  private String password;
+  @JoinTable(
+          name = "roles_assigned",
+          joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id")},
+          inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+  )
+  
   @ManyToMany
-  private List<Role> roleList = new ArrayList();
+  private List<Role> roleList;
 
 
 // gensalt's log_rounds parameter determines the complexity
@@ -63,14 +72,15 @@ public class User implements Serializable {
 
         
    public boolean verifyPassword(String pw){
-        return (BCrypt.checkpw(pw,userPass));
+        return (BCrypt.checkpw(pw, password));
        
     }
 
-  public User(String userName, String userPass) {
+  public User(String userName, String password) {
     this.userName = userName;
-    String hashed1 = BCrypt.hashpw(userPass, BCrypt.gensalt(12));
-    this.userPass = hashed1;
+    String hashed1 = BCrypt.hashpw(password, BCrypt.gensalt(12));
+    this.password = hashed1;
+    roleList = new ArrayList<>();
    
   }
 
@@ -83,12 +93,12 @@ public class User implements Serializable {
     this.userName = userName;
   }
 
-  public String getUserPass() {
-    return this.userPass;
+  public String getPassword() {
+    return this.password;
   }
 
-  public void setUserPass(String userPass) {
-    this.userPass = userPass;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public List<Role> getRoleList() {
@@ -102,5 +112,15 @@ public class User implements Serializable {
   public void addRole(Role userRole) {
     roleList.add(userRole);
   }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+  
+  
 
 }

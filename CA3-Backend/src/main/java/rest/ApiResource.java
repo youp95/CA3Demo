@@ -4,7 +4,7 @@ import DTO.PersonDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import errorhandling.NotFoundException;
-import facades.SwapiFacade;
+import facades.ApiFacade;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.persistence.EntityManagerFactory;
@@ -21,10 +21,10 @@ import utils.EMF_Creator;
  *
  */
 @Path("swapi")
-public class SwapiResource {
+public class ApiResource {
     
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
-    private static final SwapiFacade SF = SwapiFacade.getSwappiFacade();
+    private static final ApiFacade AF = ApiFacade.getApiFacade();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
     @Context
@@ -35,7 +35,7 @@ public class SwapiResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getPersons() throws NotFoundException {
         try {
-            List<PersonDTO> persons = SF.getAll();
+            List<PersonDTO> persons = AF.getAll();
             return GSON.toJson(persons);
         } catch (InterruptedException | ExecutionException ex) {
 
