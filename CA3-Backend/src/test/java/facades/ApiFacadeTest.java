@@ -19,7 +19,7 @@ import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
 
-//@Disabled
+@Disabled
 public class ApiFacadeTest {
 
    

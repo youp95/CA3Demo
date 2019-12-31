@@ -30,7 +30,7 @@ import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
 
-//@Disabled
+@Disabled
 public class ApiResourceTest {
     
     private static final int SERVER_PORT = 7777;

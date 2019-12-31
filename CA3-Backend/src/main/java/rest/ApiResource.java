@@ -7,6 +7,7 @@ import errorhandling.NotFoundException;
 import facades.ApiFacade;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -33,6 +34,7 @@ public class ApiResource {
     @Path ("all")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"user","admin"})
     public String getPersons() throws NotFoundException {
         try {
             List<PersonDTO> persons = AF.getAll();
