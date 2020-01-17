@@ -1,10 +1,13 @@
 package rest;
 
 import DTO.PersonDTO;
+import DTO.SwapiDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import errorhandling.NotFoundException;
 import facades.ApiFacade;
+import java.io.IOException;
+import java.net.ProtocolException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.annotation.security.RolesAllowed;
@@ -31,6 +34,7 @@ public class ApiResource {
     @Context
     private UriInfo context;
     
+   /*
     @Path ("all")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -44,4 +48,24 @@ public class ApiResource {
             throw new NotFoundException(ex.getMessage());
         }
     }
+*/
+    
+     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("data")
+    @RolesAllowed({"user", "admin"})
+    public List<String> getData() throws IOException, ProtocolException, ExecutionException, InterruptedException {
+        List<String> data = AF.getDataInParallelWithQueue();
+        return data;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("datadto")
+    @RolesAllowed({"user", "admin"})
+    public List<SwapiDTO> getDataDTO() throws IOException, ProtocolException, ExecutionException, InterruptedException {
+        List<SwapiDTO> data = AF.getDataInParallelWithQueueAndDTO();
+        return data;
+    }
+
 }

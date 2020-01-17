@@ -26,33 +26,38 @@ import utils.EMF_Creator;
 
 public class UserFacadeTest {
     
-     private static EntityManagerFactory emf;
-     private static UserFacade facade;
+     private static EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.DROP_AND_CREATE);
+     private static UserFacade facade = UserFacade.getUserFacade(emf);
              
-    private User user;
-    private User admin;
-    private User both;
+    private static User user2 = new User("user", "test");
+    private static User user_admin2 = new User("user_admin", "test");
+    private static User admin2 = new User("admin", "test");
+    private static User both2 = new User("user_admin", "test");
+    private static Role userRole2 = new Role("user");
+    private static Role adminRole2 = new Role("admin");
     
     public UserFacadeTest() {
     }
     
      @BeforeAll
     public static void setUpClass() {
-        emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.DROP_AND_CREATE);
-        facade = UserFacade.getUserFacade(emf);
-    }
+    
+      }
     
     
-    @AfterAll
-    public static void tearDownClass() {
+   @AfterAll
+    public static void closeTestServer() {
+        //Don't forget this, if you called its counterpart in @BeforeAll
+//        EMF_Creator.endREST_TestWithDB();
     }
+
+    // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
+    //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     
     
     @BeforeEach
     public void setUp() {
-
         EntityManager em = emf.createEntityManager();
-
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
@@ -61,11 +66,11 @@ public class UserFacadeTest {
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            user = new User("user", "test");
+            User user = new User("user", "test");
             user.addRole(userRole);
-            admin = new User("admin", "test");
+            User admin = new User("admin", "test");
             admin.addRole(adminRole);
-            both = new User("user_admin", "test");
+            User both = new User("user_admin", "test");
             both.addRole(userRole);
             both.addRole(adminRole);
             em.persist(userRole);
@@ -100,19 +105,26 @@ public class UserFacadeTest {
     }
     
     /**
-     * Testing getVeryfiedUser() from UserFacade
+     * Testing getVerifiedUser() from UserFacade
      */
     @Test
-    public void testGetVeryfiedUser() throws Exception {
-        System.out.println("getVeryfiedUser");
-        
-        String username = "admin";
+    public void testGetVerifiedUser() throws Exception {
+        System.out.println("getVerifiedUser");
+        String username = "user";
         String password = "test";
-     
-        User result = facade.getVeryfiedUser(username, password);
-        assertEquals("admin", result.getUserName());
+        
+        String expResult = user2.getUserName();
+        String result = null;
+        try {
+            if (facade != null) {
+                result = facade.getVerifiedUser(username, password).getUserName();
+            }
+        } catch (Exception ex) {
+            System.out.println("Exception caught: " + ex);
+        }
+        assertEquals(expResult, result);
     }
-    
+
     
 
     

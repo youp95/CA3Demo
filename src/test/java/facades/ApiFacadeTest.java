@@ -83,10 +83,13 @@ public class ApiFacadeTest {
         assertEquals(expResult, result);
     }
     
+    
     /**
     * Testing getAll() from class ApiFacade
     * @throws java.lang.Exception
     */
+    
+    /*
     @Test
    public void testGetAll() throws Exception {
        System.out.println("getAll");
@@ -96,4 +99,5 @@ public class ApiFacadeTest {
        assertTrue(result.get(1)!=null);
        
 }
+   */
 }

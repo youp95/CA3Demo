@@ -47,14 +47,13 @@ public class LoginEndpoint {
     String password = json.get("password").getAsString();
 
     try {
-      User user = USER_FACADE.getVeryfiedUser(username, password);
+      User user = USER_FACADE.getVerifiedUser(username, password);
       String token = createToken(username, user.getRolesAsStrings());
-      JsonElement roles = GSON.toJsonTree(user.getRolesAsStrings());
       
       JsonObject responseJson = new JsonObject();
       responseJson.addProperty("username", username);
       responseJson.addProperty("token", token);
-      responseJson.add("roles", roles);
+     
       
       return Response.ok(new Gson().toJson(responseJson)).build();
 
