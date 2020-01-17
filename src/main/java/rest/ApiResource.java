@@ -31,8 +31,16 @@ public class ApiResource {
     private static final ApiFacade AF = ApiFacade.getApiFacade();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
-    @Context
-    private UriInfo context;
+    //@Context
+    //private UriInfo context;
+    
+    @GET
+    @Path("msg")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getMessage() {
+        return "{\"msg\":\"Welcome to Swapi\"}";
+    }
+
     
    /*
     @Path ("all")

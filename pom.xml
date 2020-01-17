@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dat.sem3.security</groupId>
-    <artifactId>CA3</artifactId>
+    <artifactId>CA3Demo</artifactId>
     <version>1</version>
     <packaging>war</packaging>
 
-    <name>CA3</name>
+    <name>CA3Demo</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -15,7 +15,7 @@
         
         <!-- TODO: Change the URL to your own tomcat server. Used to deploy your WAR-file 
         -->
-        <remote.server>http://157.230.21.103/manager/text</remote.server>
+        <remote.server>https://theyoup.com/manager/text</remote.server>
         
     </properties>
     
